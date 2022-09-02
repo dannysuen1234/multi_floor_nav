@@ -1,0 +1,115 @@
+<?xml version="1.0" ?>
+
+<launch>
+
+<arg name="map_file" default="$(find magni_nav)/maps/ground_v1.yaml" doc="Path to a map .yaml file (required)." />
+  <arg name="virtual_walls_map_file" default="$(arg map_file)" doc="Path to a virtual walls map .yaml file (optional)." />
+  <arg name="with_virtual_walls" default="false" />
+
+
+  <arg name="robot_1_x" default = "0" />
+  <arg name="robot_1_y" default = "0" />
+  <arg name="robot_2_x" default = "10" />
+  <arg name="robot_2_y" default = "10" />
+
+
+
+
+<!-- for changing gazebo model pose -->
+<arg name = "w311_desk1_1_pose" default ="" />
+<arg name = "w311_desk1_2_pose" default ="" />
+<arg name = "w311_desk1_3_pose" default ="" />
+<arg name = "w311_desk1_4_pose" default ="" />
+<arg name = "w311_desk2_1_pose" default ="" />
+<arg name = "w311_desk2_2_pose" default ="" />
+<arg name = "w311_desk2_3_pose" default ="" />
+<arg name = "w311_desk2_4_pose" default ="" />
+<arg name = "w311_desk3_1_pose" default ="" />
+<arg name = "w311_desk3_2_pose" default ="" />
+<arg name = "w311_desk3_3_pose" default ="" />
+<arg name = "w311_desk3_4_pose" default ="" />
+<arg name = "w311_desk4_1_pose" default ="" />
+<arg name = "w311_desk4_2_pose" default ="" />
+<arg name = "w311_desk4_3_pose" default ="" />
+<arg name = "w311_desk4_4_pose" default ="" />
+<arg name = "w311_desk5_1_pose" default ="" />
+<arg name = "w311_desk5_2_pose" default ="" />
+<arg name = "w311_desk6_1_pose" default ="" />
+<arg name = "w311_desk6_2_pose" default ="" />
+<arg name = "w311_desk6_3_pose" default ="" />
+<arg name = "w311_desk6_4_pose" default ="" />
+<arg name = "w311_desk7_1_pose" default ="" />
+<arg name = "w311_desk7_2_pose" default ="" />
+
+
+
+<include file="$(find magni_gazebo)/launch/multi_robot_world.launch">
+<arg name="robot_1_x" value = "$(arg robot_1_x)" />
+<arg name="robot_1_y" value = "$(arg robot_1_y)" />
+<arg name="robot_2_x" value = "$(arg robot_2_x)" />
+<arg name="robot_2_y" value = "$(arg robot_2_y)" />
+<arg name = "w311_desk1_1_pose" value ="$(arg w311_desk1_1_pose)" />
+<arg name = "w311_desk1_2_pose" value ="$(arg w311_desk1_2_pose)" />
+<arg name = "w311_desk1_3_pose" value ="$(arg w311_desk1_3_pose)" />
+<arg name = "w311_desk1_4_pose" value ="$(arg w311_desk1_4_pose)" />
+<arg name = "w311_desk2_1_pose" value ="$(arg w311_desk2_1_pose)" />
+<arg name = "w311_desk2_2_pose" value ="$(arg w311_desk2_2_pose)" />
+<arg name = "w311_desk2_3_pose" value ="$(arg w311_desk2_3_pose)" />
+<arg name = "w311_desk2_4_pose" value ="$(arg w311_desk2_4_pose)" />
+<arg name = "w311_desk3_1_pose" value ="$(arg w311_desk3_1_pose)" />
+<arg name = "w311_desk3_2_pose" value ="$(arg w311_desk3_2_pose)" />
+<arg name = "w311_desk3_3_pose" value ="$(arg w311_desk3_3_pose)" />
+<arg name = "w311_desk3_4_pose" value ="$(arg w311_desk3_4_pose)" />
+<arg name = "w311_desk4_1_pose" value ="$(arg w311_desk4_1_pose)" />
+<arg name = "w311_desk4_2_pose" value ="$(arg w311_desk4_2_pose)" />
+<arg name = "w311_desk4_3_pose" value ="$(arg w311_desk4_3_pose)" />
+<arg name = "w311_desk4_4_pose" value ="$(arg w311_desk4_4_pose)" />
+<arg name = "w311_desk5_1_pose" value ="$(arg w311_desk5_1_pose)" />
+<arg name = "w311_desk5_2_pose" value ="$(arg w311_desk5_2_pose)" />
+<arg name = "w311_desk6_1_pose" value ="$(arg w311_desk6_1_pose)" />
+<arg name = "w311_desk6_2_pose" value ="$(arg w311_desk6_2_pose)" />
+<arg name = "w311_desk6_3_pose" value ="$(arg w311_desk6_3_pose)" />
+<arg name = "w311_desk6_4_pose" value ="$(arg w311_desk6_4_pose)" />
+<arg name = "w311_desk7_1_pose" value ="$(arg w311_desk7_1_pose)" />
+<arg name = "w311_desk7_2_pose" value ="$(arg w311_desk7_2_pose)" />
+</include>
+
+
+<include file="$(find magni_nav)/launch/amcl.launch">
+<arg name="initial_pose_x" value ="$(arg robot_1_x)" />
+<arg name="initial_pose_y" value ="$(arg robot_1_y)" />
+<arg name="tf_prefix" value ="magni_1" />
+</include>
+
+<include file="$(find magni_nav)/launch/amcl.launch">
+<arg name="initial_pose_x" value ="$(arg robot_2_x)" />
+<arg name="initial_pose_y" value ="$(arg robot_2_y)" />
+<arg name="tf_prefix" value ="magni_2" />
+</include>
+
+
+<include file="$(find magni_nav)/launch/start_planner.launch">
+ <arg name="prefix" value ="magni_1/" /> 
+</include>
+
+<include file="$(find magni_nav)/launch/start_planner.launch">
+ <arg name="prefix" value ="magni_2/" /> 
+</include>
+
+
+<include file="$(find magni_nav)/launch/start_maps.launch">
+      <arg name="map_file" value="$(arg map_file)" />
+      <arg name="virtual_walls_map_file" value="$(arg virtual_walls_map_file)" />
+      <arg name="with_virtual_walls" value="$(arg with_virtual_walls)" />
+</include>
+
+
+
+<!-- this part for rviz -->
+
+<node ns="magni_1" type = "rviz" name = "rviz" pkg="rviz" args="-d $(find magni_nav)/rviz/navigation_1.rviz" />
+<node ns="magni_2" type = "rviz" name = "rviz" pkg="rviz" args="-d $(find magni_nav)/rviz/navigation_2.rviz" />
+
+
+
+</launch>
